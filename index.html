@@ -24,7 +24,9 @@ var snd=new Audio('time.wav');
 snd.volume=0.0;
 snd.load();
 snd.volume=1.0;
+
 function init(){
+	ende=1;
 	timer1=savetimer1;
 	timer2=savetimer2;
 	timer3=savetimer3;
@@ -77,7 +79,7 @@ function draw(){
 	ctx.fillStyle='rgba(100,100,10,1)';
 	ctx.fillRect(700,200,100,100);
 	ctx.fillStyle= 'white';
-	ctx.fillText('reset', 720,370);
+	ctx.fillText('reset', 620,370);
 
 }
 function doMouseDown(event){
@@ -89,6 +91,7 @@ function doMouseDown(event){
 	if ((e1>300) && (e1<400) && (e2>300) && (e2<400)) timer2-=5;
 	if ((e1>500) && (e1<600) && (e2>200) && (e2<300)) timer3+=5;
 	if ((e1>500) && (e1<600) && (e2>300) && (e2<400)) timer3-=5;
+	if ((e1>700) && (e1<800) && (e2>200) && (e2<300)) init();
 	if ((e1>700) && (e1<800) && (e2>300) && (e2<400)) {
 		savetimer1=timer1;
 		savetimer2=timer2;

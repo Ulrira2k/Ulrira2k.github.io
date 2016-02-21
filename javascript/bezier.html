@@ -1,0 +1,103 @@
+<html>
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+<canvas id="ctxcanvas" width="800" height="400" style="border:1px solid #000000;"></canvas>
+
+
+<script>
+// rot = 1, blau = -1
+var ctx = document.getElementById("ctxcanvas").getContext("2d");
+document.body.addEventListener('mousedown', doMouseDown, false);
+document.body.addEventListener('mousemove',doMouseMove,false);
+ctx.font= '30px Arial';
+window.scrollTo(0, 1);
+var n=100;
+var punktmenge = []
+
+function init(){
+ctx.clearRect(0,0,800,400);
+punktmenge = []
+}
+
+function bezier(menge,proz){
+	if (menge.length<2) return [0,0];
+	if (menge.length==2) return [Math.round(menge[0][0]+(proz/n*(menge[1][0]-menge[0][0]))),Math.round(menge[0][1]+(proz/n*(menge[1][1]-menge[0][1])))]
+	else {
+		var liste=[];
+		for (i=0;i<(menge.length-1);i++){
+			liste.push([Math.round(menge[i][0]+(proz/n*(menge[i+1][0]-menge[i][0]))),Math.round(menge[i][1]+(proz/n*(menge[i+1][1]-menge[i][1])))])
+		}
+		return bezier(liste,proz)
+	}
+	
+	
+}
+
+function draw(){
+	ctx.fillStyle='rgba(150,150,150,1)';
+	ctx.fillRect(600,300,200,100);
+	ctx.fillStyle= 'red';
+	ctx.fillText('Bezier me',620,350);
+
+	ctx.fillStyle='rgba(50,150,150,1)';
+	ctx.fillRect(600,200,200,100);
+	ctx.fillStyle= 'red';
+	ctx.fillText('Clear',620,250);
+
+	ctx.fillStyle = 'black';
+
+	ctx.beginPath();
+	for (i in punktmenge){
+		ctx.lineTo(punktmenge[i][0],punktmenge[i][1]);
+	}
+	ctx.strokeStyle='black';
+	ctx.lineWidth=2;
+	ctx.stroke();
+	
+
+}
+
+function calcdraw(){
+	ctx.clearRect(0,0,800,400);
+	var z=0;
+	var erg;
+	ctx.fillStyle = 'green';
+	ctx.beginPath();
+	while (z<n+1) {
+		erg=(bezier(punktmenge,z));
+		ctx.lineTo(erg[0],erg[1]);
+		z +=1;
+	}
+		//ctx.lineTo(bezier(punktmenge,i))
+	//}
+	ctx.strokeStyle = '#00ff00';
+	ctx.lineWidth=3;
+	ctx.stroke();
+}
+
+function doMouseDown(event){
+	e1=event.pageX;
+	e2=event.pageY;
+	if ((e1>600) && (e1<800) && (e2>300) && (e2<400)) calcdraw()
+		else {
+			if ((e1>600) && (e1<800) && (e2>200) && (e2<300)) init()
+			else {
+				if ((e1>0) && (e1<800) && (e2>0) && (e2<400)) punktmenge.push([e1,e2]);
+			}
+		}
+	}
+
+
+function doMouseMove(event){
+}
+
+setInterval(draw,100);
+
+
+
+
+</script>
+</body>
+</html>
